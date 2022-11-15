@@ -1,7 +1,7 @@
 import speech_recognition as sr
 import pyttsx3
-import pywhatkit
 import datetime
+import pywhatkit
 import wikipedia
 import pyjokes
 
@@ -10,24 +10,22 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 
+def defCommand(value):
+    talk('u said: ' + value)
 
 def talk(text):
     engine.say(text)
     engine.runAndWait()
 
-def speak():
-    try:
-        with sr.Microphone() as mic:
-            print('I\'m listening')
-            voice = listener.listen(mic)
-            command = listener.recognize_google(voice)
+with sr.Microphone() as source:
+    print('listening')
+    while True:
+        audio = listener.listen(source)
+        try:
+            command = listener.recognize_google(audio)
             command = command.lower()
-            if 'jarvis' in command:
-                command = command.replace('jarvis', '')
-                return command
 
-    except NameError:
-        talk('I couldn\'t hear you')
-        print(NameError)
+            print(command)
 
-print(speak())
+        except:
+            print("Couldn't hear you well")
