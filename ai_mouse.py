@@ -24,12 +24,12 @@ while True:
 
     if len(landmarkList) != 0:
         x1, y1 = landmarkList[8][1:]
-        x2, y2 = landmarkList[12][1:]
+        x2, y2 = landmarkList[4][1:]
 
         fingers = detector.fingersUp()
 
         cv2.rectangle(img, (frameR, frameR), (wCam - frameR, hCam - frameR), (200, 200, 0), 2)
-        if fingers[1] and not fingers[2]:
+        if fingers[1] and not fingers[0]:
             x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
             y3 = np.interp(y1, (frameR, hCam - frameR), (0, hScr))
 
@@ -42,8 +42,14 @@ while True:
 
         if fingers[1] and fingers[2]:
             length, img = detector.findDistance(8, 12, img)
-            
+
             if length < 30:
+                pg.rightClick()
+        
+        if fingers[1] and fingers[0]:
+            length, img = detector.findDistance(8, 4, img)
+            
+            if length > 130:
                 pg.click()
 
     cv2.imshow("Tracking", img)
