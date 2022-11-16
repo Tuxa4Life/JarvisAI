@@ -7,7 +7,7 @@ import pyautogui as pg
 wCam, hCam = 640, 480 
 wScr, hScr = pg.size()
 frameR = 130
-smoothing = 7
+smoothing = 5
 plocX, plocY = 0, 0
 clocX, clocY = 0, 0
 
@@ -15,7 +15,7 @@ cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
 
-detector = th.HandDetector()
+detector = th.HandDetector(maxHands=1)
     
 while True:
     success, img = cap.read()
@@ -45,8 +45,6 @@ while True:
             
             if length < 30:
                 pg.click()
-
-        
 
     cv2.imshow("Tracking", img)
     cv2.waitKey(1)
