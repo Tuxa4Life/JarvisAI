@@ -5,7 +5,7 @@ class VoiceAssistant():
     def __init__(self):
         self.listener = sr.Recognizer()
         self.engine = pyttsx3.init()
-        
+
 
     def talk(self, text):
         self.engine.say(text)
@@ -22,10 +22,11 @@ class VoiceAssistant():
                 command = command.lower()
 
                 self.talk('Got it')
+                if 'nothing' in command or 'cancel' in command:
+                    return ' '
                 return command
             except:
                 self.talk("Couldn't hear you well")
-                return ''
 
 # dummy
 def main():
