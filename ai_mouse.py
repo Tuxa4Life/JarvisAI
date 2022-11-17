@@ -58,23 +58,26 @@ while True:
             plocX = clocX
             plocY = clocY
 
-        if fingers[1] and fingers[2] and not fingers[3] and not fingers[4]:
+        if fingers[1] and fingers[2] and not fingers[3] and not fingers[4]: 
             length, img = detector.findDistance(8, 12, img)
 
             if length < 30:
                 pg.click()
 
-        if fingers[0] and not fingers[3] and not fingers[4]:
+        if fingers[0] and not fingers[2] and not fingers[3] and not fingers[4]: # if wont work renove fingers2
             length, img = detector.findDistance(8, 4, img)
 
             if length > 130:
                 mouseDown()
             else:
                 mouseUp()
+        
+        if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
+            pg.rightClick()
+        
 
         if fingers[0] and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
-           command = voiceAss.command()
-           pg.typewrite(command)
+            voiceAss.command()
 
     cv2.imshow("Tracking", img)
     cv2.waitKey(1)

@@ -1,5 +1,6 @@
 import speech_recognition as sr
 import pyttsx3
+import pyautogui as pg
 
 class VoiceAssistant():
     def __init__(self):
@@ -22,9 +23,16 @@ class VoiceAssistant():
                 command = command.lower()
 
                 self.talk('Got it')
-                if 'nothing' in command or 'cancel' in command:
-                    return ' '
-                return command
+                if 'nothing' in command or 'cancel' in command or 'delete' in command:
+                    pg.typewrite(' ')
+                    return
+                if 'copy' in command or 'remember' in command:
+                    pg.hotkey('ctrl', 'c')
+                    return
+                if 'paste' in command:
+                    pg.hotkey('ctrl', 'v')
+                    return
+                pg.typewrite(command)
             except:
                 self.talk("Couldn't hear you well")
 
