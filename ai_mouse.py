@@ -16,7 +16,24 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 
 detector = th.HandDetector(maxHands=1)
-    
+
+mouseState = False
+def mouseDown():
+    global mouseState
+    if mouseState:
+        None
+    else:
+        pg.mouseDown()
+        mouseState = True
+
+def mouseUp():
+    global mouseState
+    if not mouseState:
+        None
+    else:
+        pg.mouseUp()
+        mouseState = False
+        
 while True:
     success, img = cap.read()
     img = detector.findHands(img)
@@ -29,7 +46,7 @@ while True:
         fingers = detector.fingersUp()
 
         cv2.rectangle(img, (frameR, frameR), (wCam - frameR, hCam - frameR), (200, 200, 0), 2)
-        if fingers[1] and not fingers[0]:
+        if fingers[1] and not fingers[2]:
             x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
             y3 = np.interp(y1, (frameR, hCam - frameR), (0, hScr))
 
@@ -44,13 +61,15 @@ while True:
             length, img = detector.findDistance(8, 12, img)
 
             if length < 30:
-                pg.rightClick()
-        
-        if fingers[1] and fingers[0]:
-            length, img = detector.findDistance(8, 4, img)
-            
-            if length > 130:
                 pg.click()
+
+        if fingers[0]:
+            length, img = detector.findDistance(8, 4, img)
+
+            if length > 130:
+                mouseDown()
+            else:
+                mouseUp()
 
     cv2.imshow("Tracking", img)
     cv2.waitKey(1)
