@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 import TuxasHandtracking as th
+from TuxasVoiceAssistant import command
 import pyautogui as pg
 
 wCam, hCam = 640, 480 
@@ -70,6 +71,9 @@ while True:
                 mouseDown()
             else:
                 mouseUp()
+
+        if fingers[0] and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
+            print('trigger')
 
     cv2.imshow("Tracking", img)
     cv2.waitKey(1)

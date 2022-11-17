@@ -3,7 +3,6 @@ import pyttsx3
 import datetime
 import pywhatkit
 import wikipedia
-import pyjokes
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
