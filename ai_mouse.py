@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
-import time
 import TuxasHandtracking as th
-from TuxasVoiceAssistant import command
+import TuxasVoiceAssistant as tv
 import pyautogui as pg
 
 wCam, hCam = 640, 480 
@@ -17,6 +16,7 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 
 detector = th.HandDetector(maxHands=1)
+voiceAss = tv.VoiceAssistant()
 
 mouseState = False
 def mouseDown():
@@ -58,13 +58,13 @@ while True:
             plocX = clocX
             plocY = clocY
 
-        if fingers[1] and fingers[2]:
+        if fingers[1] and fingers[2] and not fingers[3] and not fingers[4]:
             length, img = detector.findDistance(8, 12, img)
 
             if length < 30:
                 pg.click()
 
-        if fingers[0]:
+        if fingers[0] and not fingers[3] and not fingers[4]:
             length, img = detector.findDistance(8, 4, img)
 
             if length > 130:
@@ -73,7 +73,8 @@ while True:
                 mouseUp()
 
         if fingers[0] and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
-            print('trigger')
+           command = voiceAss.command()
+           pg.typewrite(command)
 
     cv2.imshow("Tracking", img)
     cv2.waitKey(1)

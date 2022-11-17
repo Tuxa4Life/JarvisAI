@@ -1,23 +1,38 @@
 import speech_recognition as sr
 import pyttsx3
-import pyautogui as pg
 
-listener = sr.Recognizer()
-engine = pyttsx3.init()
+class VoiceAssistant():
+    def __init__(self):
+        self.listener = sr.Recognizer()
+        self.engine = pyttsx3.init()
+        
 
-def talk(text):
-    engine.say(text)
-    engine.runAndWait()
+    def talk(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
 
-def command():
-    with sr.Microphone() as source:
-        talk('Listening')
-        while True:
-            audio = listener.listen(source)
+
+    def command(self):
+        with sr.Microphone() as source:
+            self.talk('Listening')
+
+            audio = self.listener.listen(source)
             try:
-                command = listener.recognize_google(audio)
+                command = self.listener.recognize_google(audio)
                 command = command.lower()
 
-                pg.write(command)
+                self.talk('Got it')
+                return command
             except:
-                talk("Couldn't hear you well")
+                self.talk("Couldn't hear you well")
+                return ''
+
+# dummy
+def main():
+    vs = VoiceAssistant()
+
+    vs.talk('Hello im Nick\'s voice assistant.')
+    print(vs.command())
+
+if __name__ == "__main__":
+    main()
