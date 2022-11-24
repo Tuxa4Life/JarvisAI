@@ -16,7 +16,7 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 
 detector = th.HandDetector(maxHands=1)
-voiceAss = tv.VoiceAssistant(micId=2)
+voiceAss = tv.VoiceAssistant(micId=0)
 
 mouseState = False
 def mouseDown():
