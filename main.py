@@ -1,30 +1,14 @@
-import speech_recognition as sr
-import pyttsx3
-import datetime
-import pywhatkit
-import wikipedia
+import cv2
+import mediapipe as mp
 
-listener = sr.Recognizer()
-engine = pyttsx3.init()
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+capture = cv2.VideoCapture(0)
+capture.set(10, 100)
 
-def defCommand(value):
-    talk('u said: ' + value)
+while True:
+    success, img = capture.read()
+    img = cv2.flip(img, 1)
 
-def talk(text):
-    engine.say(text)
-    engine.runAndWait()
+    img = cv2.putText(img, 'Pidarast', (100, 100), cv2.QT_FONT_NORMAL, 3, (0, 0, 255))
 
-with sr.Microphone() as source:
-    print('listening')
-    while True:
-        audio = listener.listen(source)
-        try:
-            command = listener.recognize_google(audio)
-            command = command.lower()
-
-            print(command)
-
-        except:
-            print("Couldn't hear you well")
+    cv2.imshow('Window', img)
+    cv2.waitKey(1)
