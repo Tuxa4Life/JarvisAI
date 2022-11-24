@@ -1,9 +1,14 @@
 import TuxasHandtracking as th
+import TuxasVoiceAssistant as tv
 import cv2
 import time
 
 cap = cv2.VideoCapture(0)
-detector = th.HandDetector()
+detector = th.HandDetector(detectionConfidence=0.8, maxHands=1)
+voiceAss = tv.VoiceAssistant()
+
+cap.set(3, 1500)
+cap.set(4, 1000)
 
 while True:
     try:

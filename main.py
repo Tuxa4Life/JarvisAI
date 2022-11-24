@@ -1,30 +1,31 @@
-import speech_recognition as sr
-import pyttsx3
-import datetime
-import pywhatkit
-import wikipedia
+import cv2
+import mediapipe as mp
+import TuxasHandtracking as th
+import TuxasFaceDetectionModule as tf
 
-listener = sr.Recognizer()
-engine = pyttsx3.init()
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+mpDraw = mp.solutions.drawing_utils
+mpPose = mp.solutions.pose
 
-def defCommand(value):
-    talk('u said: ' + value)
+pose = mpPose.Pose()
+detector = th.HandDetector()
+fDetector = tf.FaceDetector(faceCascade) 
+cap = cv2.VideoCapture(0)
+pTime = 0
 
-def talk(text):
-    engine.say(text)
-    engine.runAndWait()
+while True:
+    success, img = cap.read()
+    img = detector.findHands(img)
+    img = fDetector.findFace(img)
+    imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    results = pose.process(imgRGB)
 
-with sr.Microphone() as source:
-    print('listening')
-    while True:
-        audio = listener.listen(source)
-        try:
-            command = listener.recognize_google(audio)
-            command = command.lower()
+    if results.pose_landmarks:
+        mpDraw.draw_landmarks(img, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
+        for id, lm in enumerate(results.pose_landmarks.landmark):
+            h, w, c = img.shape
+            cx, cy = int(lm.x * w), int(lm.y * h)
 
-            print(command)
 
-        except:
-            print("Couldn't hear you well")
+    cv2.imshow("Image", img)
+    cv2.waitKey(1)
