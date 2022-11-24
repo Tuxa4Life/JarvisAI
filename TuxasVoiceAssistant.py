@@ -3,7 +3,8 @@ import pyttsx3
 import pyautogui as pg
 
 class VoiceAssistant():
-    def __init__(self):
+    def __init__(self, micId=0):
+        self.micId = micId
         self.listener = sr.Recognizer()
         self.engine = pyttsx3.init()
 
@@ -14,7 +15,7 @@ class VoiceAssistant():
 
 
     def command(self):
-        with sr.Microphone() as source:
+        with sr.Microphone(device_index=self.micId) as source:
             self.talk('Listening')
 
             audio = self.listener.listen(source)
