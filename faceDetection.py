@@ -1,16 +1,13 @@
 import cv2
+import TuxasHandtracking as th
 
-# Create the haar cascade
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-
-# Read the image
 cap = cv2.VideoCapture(0)
-
+detector = th.HandDetector()
 
 while True:
     try:
         success, img = cap.read()
-        img = cv2.flip(img, 1)
         faces = faceCascade.detectMultiScale(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 1.1, 4)
 
         for (x, y, w, h) in faces:
